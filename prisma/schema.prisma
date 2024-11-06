@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextIndex", "omitApi"]
 }
 
@@ -14,22 +14,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  firstName  String
-  lastName   String
-  phoneNumber String?
-  email String @unique
-  password String
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName          String
+  lastName           String
+  phoneNumber        String?
+  email              String   @unique
+  password           String
   hashedRefreshToken String?
-  role Role @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role               Role     @default(USER)
+  threads            Thread[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("users")
 }
 
+model Assistant {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  assistantId String
+
+  @@map("assistants")
+}
+
+model Thread {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  threadId  String
+  metadata   Json?
+  creator   User   @relation(fields: [creatorId], references: [id])
+  creatorId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("threads")
+}
 
 enum Role {
   USER
