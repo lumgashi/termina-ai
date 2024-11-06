@@ -25,8 +25,9 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
-  @HttpCode(HttpStatus.OK)
+  @Public()
   @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
     @Req() req,

@@ -32,16 +32,8 @@ export class AuthService {
   }
 
   async login(userId: string) {
-    //const { user } = req;
-    // const payload: AuthJwtPayload = {
-    //   sub: user.id,
-    // };
-    // const token = this.jwtService.sign(payload);
-    // const refreshToken = this.jwtService.sign(payload, this.refreshTokenConfig);
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRefreshToken = await argon2.hash(refreshToken);
-    console.log('am i here?')
-    console.log('herexxx', { userId, hashedRefreshToken });
     await this.userService.updateHashedRefreshedToken(
       userId,
       hashedRefreshToken,
@@ -57,13 +49,20 @@ export class AuthService {
         password: hashedPassword,
       },
     });
-    return user;
+
+    const { accessToken, refreshToken } = await this.generateTokens(user.id);
+    const hashedRefreshToken = await argon2.hash(refreshToken);
+    await this.userService.updateHashedRefreshedToken(
+      user.id,
+      hashedRefreshToken,
+    );
+    return { accessToken, refreshToken, userId: user.id };
   }
 
   async refreshToken(userId: string) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRefreshToken = await argon2.hash(refreshToken);
-    console.log('well here')
+    console.log('well here');
     await this.userService.updateHashedRefreshedToken(
       userId,
       hashedRefreshToken,
