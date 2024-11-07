@@ -48,16 +48,20 @@ export class AssistantService {
   }
 
   async createFile(file: Express.Multer.File) {
-    // Create a read stream from the file
-    const fileStream = fs.createReadStream(file.path);
+    try {
+      // Create a read stream from the file
+      const fileStream = fs.createReadStream(file.path);
 
-    // Upload the file to OpenAI
-    const uploadedFile = await this.openai.files.create({
-      file: fileStream,
-      purpose: 'assistants',
-    });
+      // Upload the file to OpenAI
+      const uploadedFile = await this.openai.files.create({
+        file: fileStream,
+        purpose: 'assistants',
+      });
 
-    return uploadedFile;
+      return uploadedFile;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async uploadFileInThread(file: any): Promise<Thread> {
@@ -118,37 +122,41 @@ export class AssistantService {
   }
 
   async createRunWithoutStreaming(threadId: string): Promise<Run> {
-    const run = await this.openai.beta.threads.runs.createAndPoll(threadId, {
-      assistant_id: this.assistant.id,
-    });
+    try {
+      const run = await this.openai.beta.threads.runs.createAndPoll(threadId, {
+        assistant_id: this.assistant.id,
+      });
 
-    const messages = await this.openai.beta.threads.messages.list(threadId, {
-      run_id: run.id,
-    });
+      const messages = await this.openai.beta.threads.messages.list(threadId, {
+        run_id: run.id,
+      });
 
-    const message = messages.data.pop()!;
-    if (message.content[0].type === 'text') {
-      const { text } = message.content[0];
-      const { annotations } = text;
-      const citations: string[] = [];
+      const message = messages.data.pop()!;
+      if (message.content[0].type === 'text') {
+        const { text } = message.content[0];
+        const { annotations } = text;
+        const citations: string[] = [];
 
-      let index = 0;
-      for (const annotation of annotations) {
-        //File citations are created by the file_search tool and define references to a specific file that was,
-        //uploaded and used by the Assistant to generate the response.
-        if (annotation.type === 'file_citation') {
-          text.value = text.value.replace(annotation.text, `[${index}]`);
-          const { file_citation } = annotation;
+        let index = 0;
+        for (const annotation of annotations) {
+          //File citations are created by the file_search tool and define references to a specific file that was,
+          //uploaded and used by the Assistant to generate the response.
+          if (annotation.type === 'file_citation') {
+            text.value = text.value.replace(annotation.text, `[${index}]`);
+            const { file_citation } = annotation;
 
-          const citedFile = await this.openai.files.retrieve(
-            file_citation.file_id,
-          );
-          citations.push(`[${index}] ${citedFile.filename}`);
+            const citedFile = await this.openai.files.retrieve(
+              file_citation.file_id,
+            );
+            citations.push(`[${index}] ${citedFile.filename}`);
+          }
+          index++;
         }
-        index++;
-      }
 
-      return run;
+        return run;
+      }
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
   }
 

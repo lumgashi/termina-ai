@@ -1,9 +1,6 @@
 import {
   Controller,
-  Get,
   Post,
-  Param,
-  Delete,
   UseInterceptors,
   UploadedFile,
   ParseFilePipe,
@@ -28,6 +25,7 @@ export class FileUploadController {
   async uploadFile(
     @UploadedFile(
       new ParseFilePipe({
+        //TODO allow only docx and pdf files
         validators: [
           // new MaxFileSizeValidator({ maxSize: 1000 }),
           // new FileTypeValidator({ fileType: 'image/jpeg' }),
@@ -37,20 +35,5 @@ export class FileUploadController {
     file: Express.Multer.File,
   ) {
     return this.fileUploadService.create(file);
-  }
-
-  @Get()
-  findAll() {
-    return this.fileUploadService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.fileUploadService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fileUploadService.remove(+id);
   }
 }
