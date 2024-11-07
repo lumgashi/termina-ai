@@ -68,4 +68,4 @@
 
 ---
 
-<p align="center">Made with ❤️ by the Termina AI team</p>
+<p align="center">Made with ❤️ by the Lum Gashi</p>
