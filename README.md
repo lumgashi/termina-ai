@@ -1,85 +1,71 @@
+<h1 align="center">Termina AI: Your Personal Contract Simplifier</h1>
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+    <b>Streamline the complexity of contracts with AI-powered insights.</b><br>
+    <i>Upload contracts, uncover key points, assess risks, and get clear answers to your questions.</i>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<h2>About Termina AI</h2>
+<p>Termina AI is an advanced contract simplification tool, built with <b>NestJS, Prisma, MongoDB, OpenAI</b>, and OpenAI's <b>Assistant API</b>. Termina AI transforms dense legal documents into easy-to-understand summaries, helping freelancers, small businesses, and individuals make informed decisions without needing extensive legal expertise.</p>
 
-## Description
+<h2>Key Features</h2>
+<ul>
+    <li><b>Document Summarization:</b> Upload contracts and receive clear, concise summaries that capture the essentials.</li>
+    <li><b>Key Points & Obligations:</b> Highlights obligations, deadlines, and responsibilities for each party in the contract.</li>
+    <li><b>Risk Analysis:</b> Identifies potential risks or restrictive clauses to assist in contract evaluation and negotiation.</li>
+    <li><b>Interactive Q&A:</b> Ask specific questions about the document and get responses within the context of your contract.</li>
+    <li><b>Secure Authentication:</b> User data is protected with <b>JWT-based Authentication</b> and <b>Google OAuth</b> for secure access.</li>
+</ul>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<h2>How It Works</h2>
+<ol>
+    <li><b>Upload a Document:</b> Users start by uploading a contract file (PDF or DOCX format).</li>
+    <li><b>Thread Creation:</b> For each document, a dedicated thread is created with additional instructions specific to the document's context.</li>
+    <li><b>File Attachment:</b> The file is attached to the thread, enabling the assistant to access and analyze it.</li>
+    <li><b>Run the Assistant:</b> A run is created, and the assistant is activated to generate a response, analyzing the document and extracting key insights.</li>
+    <li><b>Ask Follow-Up Questions:</b> Users can ask specific questions related to the contract, receiving tailored responses in a chat-like interface.</li>
+</ol>
 
-## Project setup
+<h2>Tech Stack</h2>
+<ul>
+    <li><b>Backend:</b> NestJS for server-side processing</li>
+    <li><b>Database:</b> MongoDB with Prisma for seamless data handling</li>
+    <li><b>AI Integration:</b> OpenAI's Assistant API for powerful language processing</li>
+    <li><b>Authentication:</b> JWT and Google OAuth for secure user authentication and authorization</li>
+</ul>
 
-```bash
-$ npm install
-```
+<h2>Getting Started</h2>
+<p>To get started with Termina AI, follow these steps:</p>
+<ol>
+    <li>Clone the repository: <code>git clone https://github.com/your-username/termina-ai.git</code></li>
+    <li>Install dependencies: <code>npm install</code></li>
+    <li>Set up environment variables:
+        <ul>
+            <li><code>OPENAI_API_KEY</code>: Your OpenAI API key</li>
+            <li><code>MONGODB_URI</code>: Your MongoDB connection string</li>
+            <li><code>JWT_SECRET</code>: Secret key for JWT authentication</li>
+            <li><code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code>: For Google OAuth</li>
+        </ul>
+    </li>
+    <li>Run the application: <code>npm run start</code></li>
+</ol>
 
-## Compile and run the project
+<h2>Usage</h2>
+<p>After setting up, users can:</p>
+<ul>
+    <li>Sign up and log in using email/password or Google OAuth</li>
+    <li>Upload contract documents for analysis</li>
+    <li>View summaries, key points, and risk analysis generated by the assistant</li>
+    <li>Engage in interactive Q&A with the assistant for further clarification on contract terms</li>
+</ul>
 
-```bash
-# development
-$ npm run start
+<h2>Contributing</h2>
+<p>We welcome contributions! Please fork the repository and submit a pull request with your updates. For major changes, open an issue first to discuss what you would like to change.</p>
 
-# watch mode
-$ npm run start:dev
+<h2>License</h2>
+<p>This project is licensed under the MIT License. See the <code>LICENSE</code> file for details.</p>
 
-# production mode
-$ npm run start:prod
-```
+---
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+<p align="center">Made with ❤️ by the Lum Gashi</p>
