@@ -27,16 +27,24 @@ export class AssistantService {
       apiKey: this.config.getOrThrow('OPENAI_API_KEY'), // This is the default and can be omitted
     });
 
-    //Creating the Assistant by defining its custom instructions and picking the gpt-4o model with file_search tool, which allows the Assistant to gather infomation,
+    // Creating the Assistant by defining its custom instructions and picking the gpt-4o model with file_search tool, which allows the Assistant to gather infomation,
     //and be more knowledge, outside its model
-    // this.assistant = this.openai.beta.assistants.create({
-    //   name: 'Contract Simplifier Assistant',
-    //   instructions:
-    //     'You are an AI-Powered Contract Simplifier designed to assist small businesses, freelancers, and individuals in understanding complex legal contracts. Your role is to break down dense legal language into clear, easy-to-understand summaries that highlight key points, obligations, rights, and potential risks. Provide concise, actionable insights for each contract, avoiding legal jargon where possible, and emphasize practical takeaways to help users make informed decisions. Maintain a helpful and informative tone, ensuring users understand what each section of the contract means in simple terms.',
-    //   model: 'gpt-4o',
-    //   tools: [{ type: 'file_search' }],
-    //   temperature: 0.1,
-    // });
+    this.assistant = this.openai.beta.assistants.create({
+      name: 'Contract Simplifier Assistant',
+      instructions: ` You are a professional contract simplifier. This what you will do :
+        - Automatic Detection: identify document type (e.g., lease, employment, or service contract) and provide a tailored analysis based on this classification. Content Analysis & Summarization
+        - Legal Language Simplification: detect and simplify legal jargon, turning dense contract language into plain, easy-to-read text.
+        - Section Summarization: break down the contract into sections (e.g., payment terms, confidentiality, liabilities, termination conditions) and provide summaries for each.
+        - Highlight Key Clauses: Critical clauses, such as payment schedules, non-compete, termination clauses, and liability limits, are highlighted with visual cues (e.g., icons or color coding) for quick reference.
+        - Obligation & Deadline Tracker
+        - Automatic Extraction: Dates, milestones, renewal terms, and deadlines are automatically extracted and organized into a timeline view or calendar, helping users avoid missed obligations.
+        - Risk Analysis: Analyze and flag potential risks, such as high penalties for breach of contract or restrictive termination clauses, and provides a brief explanation.
+        -Recommendations: Based on industry standards and best practices, the platform could suggest language modifications or risk-mitigation strategies (e.g., "Consider adding a mutual termination clause").
+      `,
+      model: 'gpt-4o',
+      tools: [{ type: 'file_search' }],
+      temperature: 0.1,
+    });
   }
 
   async createFile(file: Express.Multer.File) {
