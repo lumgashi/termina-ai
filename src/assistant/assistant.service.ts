@@ -10,6 +10,9 @@ import * as fs from 'fs';
 import { Prisma } from '@prisma/client';
 import { REQUEST } from '@nestjs/core';
 import { RequestWithUser } from 'src/utils/types';
+import { Run } from 'openai/resources/beta/threads/runs/runs';
+import { MessagesPage, Message } from 'openai/resources/beta/threads/messages';
+import { Thread } from 'openai/resources/beta/threads/threads';
 
 @Injectable()
 export class AssistantService {
@@ -36,24 +39,6 @@ export class AssistantService {
     // });
   }
 
-  //create a thread for the assistant
-  async createThread() {
-    const emptyThread = await this.openai.beta.threads.create();
-    try {
-      await this.prisma.thread.create({
-        data: {
-          threadId: emptyThread.id,
-          creator: {
-            connect: { id: '1' },
-          },
-        },
-      });
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-    return emptyThread;
-  }
-
   async createFile(file: Express.Multer.File) {
     // Create a read stream from the file
     const fileStream = fs.createReadStream(file.path);
@@ -67,7 +52,7 @@ export class AssistantService {
     return uploadedFile;
   }
 
-  async uploadFileInThread(file: any) {
+  async uploadFileInThread(file: any): Promise<Thread> {
     const userId = this.request.user.id;
     const thread = await this.openai.beta.threads.create({
       messages: [
@@ -96,11 +81,24 @@ export class AssistantService {
     });
 
     try {
+      const contract = await this.prisma.contract.create({
+        data: {
+          creator: {
+            connect: { id: userId },
+          },
+        },
+      });
+
+      const updatedMetadata = thread.metadata as Prisma.JsonValue;
+      updatedMetadata['contractId'] = contract.id;
       await this.prisma.thread.create({
         data: {
           threadId: thread.id,
           creator: {
             connect: { id: userId },
+          },
+          contract: {
+            connect: { id: contract.id },
           },
           metadata: thread.metadata as Prisma.JsonValue,
         },
@@ -111,7 +109,7 @@ export class AssistantService {
     return thread;
   }
 
-  async createRunWithoutStreaming(threadId: string) {
+  async createRunWithoutStreaming(threadId: string): Promise<Run> {
     const run = await this.openai.beta.threads.runs.createAndPoll(threadId, {
       assistant_id: this.assistant.id,
     });
@@ -143,6 +141,51 @@ export class AssistantService {
       }
 
       return run;
+    }
+  }
+
+  async createUserMessage(
+    threadId: string,
+    userPrompt: string,
+  ): Promise<Message> {
+    //create the message(user prompt) in the thread
+    try {
+      const threadMessages = await this.openai.beta.threads.messages.create(
+        threadId,
+        {
+          role: 'user',
+          content: userPrompt,
+        },
+      );
+
+      return threadMessages;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async createRun(threadId: string): Promise<Run> {
+    try {
+      const run = await this.openai.beta.threads.runs.createAndPoll(threadId, {
+        assistant_id: this.assistant.id,
+      });
+      return run;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async getAllMessagesInThread(
+    threadId: string,
+    runId: string,
+  ): Promise<MessagesPage> {
+    try {
+      const messages = await this.openai.beta.threads.messages.list(threadId, {
+        run_id: runId,
+      });
+      return messages;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
     }
   }
 }

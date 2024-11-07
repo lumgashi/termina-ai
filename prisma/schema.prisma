@@ -24,6 +24,7 @@ model User {
   hashedRefreshToken String?
   role               Role     @default(USER)
   threads            Thread[]
+  contracts          Contract[]
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -43,11 +44,21 @@ model Thread {
   metadata   Json?
   creator   User   @relation(fields: [creatorId], references: [id])
   creatorId String @db.ObjectId
+  contract   Contract   @relation(fields: [contractId], references: [id])
+  contractId String @unique @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("threads")
+}
+
+model Contract {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  thread      Thread?
+  metadata    Json?
+  creator     User   @relation(fields: [creatorId], references: [id])
+  creatorId   String @db.ObjectId @unique
 }
 
 enum Role {

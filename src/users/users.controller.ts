@@ -8,12 +8,13 @@ import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  @Roles(Role.ADMIN)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Roles(Role.ADMIN, Role.EDITOR)
+  @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')

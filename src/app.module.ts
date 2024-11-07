@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { AssistantModule } from './assistant/assistant.module';
+import { ContractsModule } from './contracts/contracts.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AssistantModule } from './assistant/assistant.module';
     ConfigModule.forRoot(),
     FileUploadModule,
     AssistantModule,
+    ContractsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
